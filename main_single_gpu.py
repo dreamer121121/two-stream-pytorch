@@ -14,12 +14,16 @@ import torch.utils.data
 import video_transforms
 import models
 import datasets
+from util import log
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
 
 dataset_names = sorted(name for name in datasets.__all__)
+
+log_file = "spatial.log"
+log_stream = open("spatial.log", "a")
 
 parser = argparse.ArgumentParser(description='PyTorch Two-Stream Action Recognition')
 parser.add_argument('data', metavar='DIR',
@@ -81,9 +85,9 @@ def main():
     args = parser.parse_args()
 
     # create model
-    print("Building model ... ")
+    log("Building model ... ",file=log_stream)
     model = build_model()
-    print("Model %s is loaded. " % (args.arch))
+    log("Model %s is loaded. " % (args.arch),file=log_stream)
 
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda()
@@ -94,7 +98,7 @@ def main():
 
     if not os.path.exists(args.resume):
         os.makedirs(args.resume)
-    print("Saving everything to directory %s." % (args.resume))
+    log("Saving everything to directory %s." % (args.resume),file=log_stream)
 
     cudnn.benchmark = True
 
@@ -110,7 +114,7 @@ def main():
         clip_mean = [0.5, 0.5] * args.new_length
         clip_std = [0.226, 0.226] * args.new_length
     else:
-        print("No such modality. Only rgb and flow supported.")
+        log("No such modality. Only rgb and flow supported.",file=log_stream)
 
     normalize = video_transforms.Normalize(mean=clip_mean,
                                            std=clip_std)
@@ -135,7 +139,7 @@ def main():
     val_setting_file = "val_%s_split%d.txt" % (args.modality, args.split)
     val_split_file = os.path.join(args.settings, args.dataset, val_setting_file)
     if not os.path.exists(train_split_file) or not os.path.exists(val_split_file):
-        print("No split file exists in %s directory. Preprocess the dataset first" % (args.settings))
+        log("No split file exists in %s directory. Preprocess the dataset first" % (args.settings),file=log_stream)
 
     train_dataset = datasets.__dict__[args.dataset](root=args.data,
                                                     source=train_split_file,
@@ -156,9 +160,9 @@ def main():
                                                   new_height=args.new_height,
                                                   video_transform=val_transform)
 
-    print('{} samples found, {} train samples and {} test samples.'.format(len(val_dataset)+len(train_dataset),
+    log('{} samples found, {} train samples and {} test samples.'.format(len(val_dataset)+len(train_dataset),
                                                                            len(train_dataset),
-                                                                           len(val_dataset)))
+                                                                           len(val_dataset)),file=log_stream)
 
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
@@ -178,6 +182,7 @@ def main():
 
         # train for one epoch
         train(train_loader, model, criterion, optimizer, epoch)
+        log('='*100,file=log_stream)
 
         # evaluate on validation set
         prec1 = 0.0
@@ -250,11 +255,11 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
             if (i+1) % args.print_freq == 0:
 
-                print('Epoch: [{0}][{1}/{2}]\t'
+                log('Epoch: [{0}][{1}/{2}]\t'
                       'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                       'Prec@1 {top1.val:.3f} ({top1.avg:.3f})'.format(
-                       epoch, i+1, len(train_loader)+1, batch_time=batch_time, loss=losses, top1=top1))
+                       epoch, i+1, len(train_loader)+1, batch_time=batch_time, loss=losses, top1=top1),file=log_stream)
 
 def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
@@ -287,16 +292,16 @@ def validate(val_loader, model, criterion):
         end = time.time()
 
         if i % args.print_freq == 0:
-            print('Test: [{0}/{1}]\t'
+            log('Test: [{0}/{1}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                   'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                   'Prec@3 {top3.val:.3f} ({top3.avg:.3f})'.format(
                    i, len(val_loader), batch_time=batch_time, loss=losses,
-                   top1=top1, top3=top3))
+                   top1=top1, top3=top3),file=log_stream)
 
-    print(' * Prec@1 {top1.avg:.3f} Prec@3 {top3.avg:.3f}'
-          .format(top1=top1, top3=top3))
+    log(' * Prec@1 {top1.avg:.3f} Prec@3 {top3.avg:.3f}'
+          .format(top1=top1, top3=top3),file=log_stream)
 
     return top1.avg
 
@@ -329,7 +334,7 @@ def adjust_learning_rate(optimizer, epoch):
 
     decay = 0.1 ** (sum(epoch >= np.array(args.lr_steps)))
     lr = args.lr * decay
-    print("Current learning rate is %4.6f:" % lr)
+    log("Current learning rate is %4.6f:" % lr,file=log_stream)
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

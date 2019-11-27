@@ -24,9 +24,9 @@ def make_dataset(root, source):
             data = split_f.readlines()
             for line in data:
                 line_info = line.split()
-                clip_path = os.path.join(root, line_info[0])
-                duration = int(line_info[1])
-                target = int(line_info[2])
+                clip_path = os.path.join(root, line_info[0]) #视频段路径
+                duration = int(line_info[1]) #该段视频总共有多少帧
+                target = int(line_info[2]) #该段视频的所属类别
                 item = (clip_path, duration, target)
                 clips.append(item)
     return clips
@@ -93,7 +93,7 @@ def ReadSegmentFlow(path, offsets, new_height, new_width, new_length, is_color, 
     return clip_input
 
 
-class ucf101(data.Dataset):
+class ucf101(data.Dataset): #继承torch的内置类Dataset重写一个数据集类。
 
     def __init__(self,
                  root,
@@ -110,8 +110,8 @@ class ucf101(data.Dataset):
                  target_transform=None,
                  video_transform=None):
 
-        classes, class_to_idx = find_classes(root)
-        clips = make_dataset(root, source)
+        classes, class_to_idx = find_classes(root) #似乎有问题此代码对应的目录结构为frames/ApplyEye/v_ApplyEye_c01_g01
+        clips = make_dataset(root, source) #[(clip1_path,clip1_duration,clip1_class),(clip2_path,clip2_path,clip2_class),......]
 
         if len(clips) == 0:
             raise(RuntimeError("Found 0 video clips in subfolders of: " + root + "\n"
@@ -145,6 +145,11 @@ class ucf101(data.Dataset):
         self.video_transform = video_transform
 
     def __getitem__(self, index):
+        """
+        所有继承Dataset的类必须重写此方法。在训练时会被框架自身调用。采样一段视频的帧，
+        :param index:
+        :return:
+        """
         path, duration, target = self.clips[index]
         average_duration = int(duration / self.num_segments)
         offsets = []
