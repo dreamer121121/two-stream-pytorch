@@ -156,7 +156,7 @@ class ucf101(data.Dataset): #继承torch的内置类Dataset重写一个数据集
         for seg_id in range(self.num_segments):
             if self.phase == "train":
                 if average_duration >= self.new_length:
-                    offset = random.randint(0, average_duration - self.new_length)
+                    offset = random.randint(0, average_duration - self.new_length)#当前视频碎金采样一帧
                     # No +1 because randint(a,b) return a random integer N such that a <= N <= b.
                     offsets.append(offset + seg_id * average_duration)
                 else:

@@ -90,7 +90,7 @@ def main():
     log("Model %s is loaded. " % (args.arch),file=log_stream)
 
     # define loss function (criterion) and optimizer
-    criterion = nn.CrossEntropyLoss().cuda()
+    criterion = nn.CrossEntropyLoss().cuda()#交叉熵损失
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
