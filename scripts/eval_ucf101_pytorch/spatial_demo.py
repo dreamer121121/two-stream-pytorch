@@ -3,7 +3,6 @@
 import os, sys
 import collections
 import numpy as np
-import cv2
 import math
 import random
 import time
@@ -17,6 +16,7 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
+import cv2
 sys.path.insert(0, "../../")
 import models
 from VideoSpatialPrediction import VideoSpatialPrediction
