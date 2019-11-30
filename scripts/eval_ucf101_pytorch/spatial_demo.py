@@ -54,7 +54,7 @@ def main():
     model_time = model_end_time - model_start_time
     log("Action recognition model is loaded in %4.4f seconds." % (model_time))
 
-    val_file = "./spaatial_testlist01_with_labels.txt"
+    val_file = "./spatial_testlist01_with_labels.txt"
     f_val = open(val_file, "r")
     val_list = f_val.readlines()
     log("we got %d test videos" % len(val_list))
