@@ -1,0 +1,7 @@
+Action recognition model is loaded in 8.1497 seconds.
+we got 3783 test videos
+Sample 1/3783: GT: 0, Prediction: 0
+Sample 2/3783: GT: 0, Prediction: 0
+Sample 3/3783: GT: 0, Prediction: 0
+Sample 4/3783: GT: 0, Prediction: 0
+dropout=0.9 acc=85.06%
