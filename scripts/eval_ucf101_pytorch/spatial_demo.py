@@ -52,12 +52,12 @@ def main():
     spatial_net.eval()
     model_end_time = time.time()
     model_time = model_end_time - model_start_time
-    log("Action recognition model is loaded in %4.4f seconds." % (model_time))
+    log("Action recognition model is loaded in %4.4f seconds." % (model_time),file=log_stream)
 
     val_file = "./spatial_testlist01_with_labels.txt"
     f_val = open(val_file, "r")
     val_list = f_val.readlines()
-    log("we got %d test videos" % len(val_list))
+    log("we got %d test videos" % len(val_list),file=log_stream)
 
     line_id = 1
     match_count = 0
@@ -79,15 +79,15 @@ def main():
         # avg_spatial_pred = softmax(avg_spatial_pred_fc8)
 
         pred_index = np.argmax(avg_spatial_pred_fc8)
-        log("Sample %d/%d: GT: %d, Prediction: %d" % (line_id, len(val_list), input_video_label, pred_index))
+        log("Sample %d/%d: GT: %d, Prediction: %d" % (line_id, len(val_list), input_video_label, pred_index),file=log_stream)
 
         if pred_index == input_video_label:
             match_count += 1
         line_id += 1
 
-    log(match_count)
-    log(len(val_list))
-    log("Accuracy is %4.4f" % (float(match_count)/len(val_list)))
+    log(match_count,file=log_stream)
+    log(len(val_list),file=log_stream)
+    log("Accuracy is %4.4f" % (float(match_count)/len(val_list)),file=log_stream)
     np.save("ucf101_s1_rgb_resnet152.npy", np.array(result_list))
 
 if __name__ == "__main__":
