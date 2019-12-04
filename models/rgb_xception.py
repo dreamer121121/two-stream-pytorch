@@ -197,7 +197,7 @@ def rgb_xception(num_classes=1000, pretrained=True):
         # model.mean = settings['mean']
         # model.std = settings['std']
         # model.load_state_dict(model_zoo.load_url(model_urls['resnet152']))
-        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream/two-stream-pytorch/models')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
