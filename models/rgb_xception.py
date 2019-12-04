@@ -181,7 +181,7 @@ class Xception(nn.Module):
         return x
 
 
-def xception(num_classes=1000, pretrained=True):
+def rgb_xception(num_classes=1000, pretrained=True):
     model = Xception(num_classes=num_classes)
     if pretrained:
         # settings = pretrained_settings['xception'][pretrained]
