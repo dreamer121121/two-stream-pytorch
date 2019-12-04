@@ -46,7 +46,7 @@ def main():
     model_start_time = time.time()
     params = torch.load(model_path)
 
-    spatial_net = models.rgb_resnet152(pretrained=False, num_classes=101)
+    spatial_net = models.rgb_resnet101(pretrained=False, num_classes=101)
     spatial_net.load_state_dict(params['state_dict'])
     spatial_net.cuda()
     spatial_net.eval()
