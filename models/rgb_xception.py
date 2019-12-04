@@ -172,7 +172,7 @@ class Xception(nn.Module):
 
         x = F.adaptive_avg_pool2d(x, (1, 1))
         x = x.view(x.size(0), -1)
-        x = self.last_linear(x)
+        x = self.fc(x)
         return x
 
     def forward(self, input):
@@ -207,7 +207,6 @@ def rgb_xception(num_classes=1000, pretrained=True):
         # 3. load the new state dict
         model.load_state_dict(model_dict)
 
-    # TODO: ugly
-    model.last_linear = model.fc
-    del model.fc
+    # model.last_linear = model.fc
+    # del model.fc
     return model
