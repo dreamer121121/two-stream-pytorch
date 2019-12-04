@@ -9,7 +9,7 @@ from torch.nn import init
 
 
 
-__all__ = ['xception']
+__all__ = ['rgb_xception']
 
 
 model_urls = {'Xception': 'http://data.lip6.fr/cadene/pretrainedmodels/xception-43020ad28.pth'}
