@@ -275,14 +275,14 @@ class InceptionV4(nn.Module):
             Inception_C(),
             Inception_C()
         )
-        self.last_linear = nn.Linear(1536, num_classes)
+        self.linear = nn.Linear(1536, num_classes)
 
     def logits(self, features):
         #Allows image of any size to be processed
         adaptiveAvgPoolWidth = features.shape[2]
         x = F.avg_pool2d(features, kernel_size=adaptiveAvgPoolWidth)
         x = x.view(x.size(0), -1)
-        x = self.last_linear(x)
+        x = self.linear(x)
         return x
 
     def forward(self, input):
@@ -294,7 +294,7 @@ class InceptionV4(nn.Module):
 def rgb_inceptionv4(num_classes=101, pretrained=True):
     model = InceptionV4(num_classes=num_classes)
     if pretrained:
-        pretrained_dict = model_zoo.load_url(url = model_urls['Inceptionv4'],model_dir='/home/xt/two-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['Inceptionv4'],model_dir='./')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
@@ -306,8 +306,9 @@ def rgb_inceptionv4(num_classes=101, pretrained=True):
 
     return model
 
-
+#
 # if __name__ == '__main__':
+#     rgb_inceptionv4()
 #     #
     # assert inceptionv4(num_classes=10, pretrained=None)
     # print('success')
