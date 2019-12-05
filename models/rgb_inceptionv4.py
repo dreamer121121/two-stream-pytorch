@@ -294,7 +294,7 @@ class InceptionV4(nn.Module):
 def rgb_inceptionv4(num_classes=101, pretrained=True):
     model = InceptionV4(num_classes=num_classes)
     if pretrained:
-        pretrained_dict = model_zoo.load_url(url = model_urls['Inceptionv4'],model_dir='/home/xt/tw-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['Inceptionv4'],model_dir='/home/xt/two-stream-pytorch/models')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
