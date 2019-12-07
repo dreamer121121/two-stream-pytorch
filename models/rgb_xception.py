@@ -175,7 +175,7 @@ class Xception(nn.Module):
 def rgb_xception(num_classes=1000, pretrained=True):
     model = Xception(num_classes=num_classes)
     if pretrained:
-        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream/two-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream-pytorch/models')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
