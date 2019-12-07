@@ -6,9 +6,6 @@ import torch
 import torch.nn.functional as F
 from torch.nn import init
 
-
-
-
 __all__ = ['rgb_xception']
 
 
@@ -125,17 +122,10 @@ class Xception(nn.Module):
         self.conv4 = SeparableConv2d(1536,2048,3,1,1)
         self.bn4 = nn.BatchNorm2d(2048)
 
-        self.last_linear = nn.Linear(2048, num_classes)
+        #drop层
+        self.dp = nn.Dropout(p=0.5)
 
-        # #------- init weights --------
-        # for m in self.modules():
-        #     if isinstance(m, nn.Conv2d):
-        #         n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-        #         m.weight.data.normal_(0, math.sqrt(2. / n))
-        #     elif isinstance(m, nn.BatchNorm2d):
-        #         m.weight.data.fill_(1)
-        #         m.bias.data.zero_()
-        # #-----------------------------
+        self.last_linear = nn.Linear(2048, num_classes)
 
     def features(self, input):
         x = self.conv1(input)
@@ -172,6 +162,7 @@ class Xception(nn.Module):
 
         x = F.adaptive_avg_pool2d(x, (1, 1))
         x = x.view(x.size(0), -1)
+        x = self.dp(x)
         x = self.last_linear(x)
         return x
 
@@ -184,19 +175,6 @@ class Xception(nn.Module):
 def rgb_xception(num_classes=1000, pretrained=True):
     model = Xception(num_classes=num_classes)
     if pretrained:
-        # settings = pretrained_settings['xception'][pretrained]
-        # assert num_classes == settings['num_classes'], \
-        #     "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
-        #
-        # model = Xception(num_classes=num_classes)
-        # model.load_state_dict(model_zoo.load_url(settings['url']))
-        #
-        # model.input_space = settings['input_space']
-        # model.input_size = settings['input_size']
-        # model.input_range = settings['input_range']
-        # model.mean = settings['mean']
-        # model.std = settings['std']
-        # model.load_state_dict(model_zoo.load_url(model_urls['resnet152']))
         pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream/two-stream-pytorch/models')
         model_dict = model.state_dict()
 
