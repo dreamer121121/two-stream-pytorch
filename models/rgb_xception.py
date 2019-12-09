@@ -123,7 +123,7 @@ class Xception(nn.Module):
         self.bn4 = nn.BatchNorm2d(2048)
 
         #drop层
-        self.dp = nn.Dropout(p=0.5)
+        self.dp = nn.Dropout(p=0.8)
 
         self.last_linear = nn.Linear(2048, num_classes)
 
