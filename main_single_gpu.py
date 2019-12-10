@@ -92,9 +92,9 @@ def main():
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda()#交叉熵损失
 
-    optimizer = torch.optim.SGD(model.parameters(), args.lr,
+    optimizer = torch.optim.SGD(filter(lambda p:p.requires_grad,model.parameters()), args.lr,
                                 momentum=args.momentum,
-                                weight_decay=args.weight_decay)
+                                weight_decay=args.weight_decay) #L1正则化
 
     if not os.path.exists(args.resume):
         os.makedirs(args.resume)

@@ -5,6 +5,8 @@ import math
 import torch
 import torch.nn.functional as F
 from torch.nn import init
+import re
+import json
 
 __all__ = ['rgb_xception']
 
@@ -175,7 +177,7 @@ class Xception(nn.Module):
 def rgb_xception(num_classes=1000, pretrained=True):
     model = Xception(num_classes=num_classes)
     if pretrained:
-        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='/home/xt/two-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['Xception'],model_dir='./')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
@@ -185,4 +187,35 @@ def rgb_xception(num_classes=1000, pretrained=True):
         # 3. load the new state dict
         model.load_state_dict(model_dict)
 
+        #frozen BN except first
+        with open('frozen.txt', 'r') as f:
+            frozen_list = json.load(f)
+
+        for name, value in model.named_parameters():
+            if name in frozen_list:
+                value.requires_grad = False
     return model
+# if __name__ == '__main__':
+#     net = rgb_xception()
+
+
+    # name_value = {}
+    # for name,value in net.named_parameters():
+    #     name_value[name] = value
+    # total_params = 0
+    # f = open('layer_name.txt','w')
+    # for name,value in name_value.items():
+    #     f.write(name)
+    #     f.write('\t')
+    #     f.write(str(list(value.size())))
+    #     f.write('\t')
+    #     i = 1
+    #     for j in value.size():
+    #         i*=j
+    #     total_params += i
+    #     f.write(str(i))
+    #     f.write('\n')
+    # f.write('total_params: '+str(total_params))
+    # f.close()
+    # total = sum(p.numel for p in net.parameters())
+    # print(total)
