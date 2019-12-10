@@ -188,7 +188,7 @@ def rgb_xception(num_classes=1000, pretrained=True):
         model.load_state_dict(model_dict)
 
         #frozen BN except first
-        with open('frozen.txt', 'r') as f:
+        with open('/home/xt/two-stream-pytorch/models/frozen.txt', 'r') as f:
             frozen_list = json.load(f)
 
         for name, value in model.named_parameters():
