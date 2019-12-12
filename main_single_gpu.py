@@ -118,7 +118,7 @@ def main():
 
     normalize = video_transforms.Normalize(mean=clip_mean,
                                            std=clip_std)
-    train_transform = video_transforms.Compose([
+    train_transform = video_transforms.Compose([ #图像转换函数
             # video_transforms.Scale((256)),
             video_transforms.MultiScaleCrop((224, 224), scale_ratios),
             video_transforms.RandomHorizontalFlip(),
@@ -164,7 +164,7 @@ def main():
                                                                            len(train_dataset),
                                                                            len(val_dataset)),file=log_stream)
 
-    train_loader = torch.utils.data.DataLoader(
+    train_loader = torch.utils.data.DataLoader( #dataloader是一个迭代器
         train_dataset,
         batch_size=args.batch_size, shuffle=True,
         num_workers=args.workers, pin_memory=True)
@@ -222,7 +222,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
     loss_mini_batch = 0.0
     acc_mini_batch = 0.0
 
-    for i, (input, target) in enumerate(train_loader):
+    for i, (input, target) in enumerate(train_loader): #train_loader是一个迭代器 i的大小torch会在底层自己进行计算len(dataset)/batch_size
 
         input = input.float().cuda(async=True)
         target = target.cuda(async=True)

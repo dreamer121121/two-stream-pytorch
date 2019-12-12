@@ -298,8 +298,8 @@ class MultiScaleCrop(object):
 
         return crop_sizes
 
-    def __call__(self, clips):
-        h, w, c = clips.shape
+    def __call__(self, clips):#内部调用，自动调用，调用次函数时传进来的参数为clips
+        h, w, c = clips.shape #height,width,channel
         is_color = False
         if c % 3 == 0:
             is_color = True
@@ -323,7 +323,7 @@ class MultiScaleCrop(object):
             num_imgs = int(c / 3)
             for frame_id in range(num_imgs):
                 cur_img = clips[:,:,frame_id*3:frame_id*3+3]
-                crop_img = cur_img[h_off:h_off+crop_height, w_off:w_off+crop_width, :]
+                crop_img = cur_img[h_off:h_off+crop_height, w_off:w_off+crop_width, :] #剪裁操作
                 scaled_clips[:,:,frame_id*3:frame_id*3+3] = cv2.resize(crop_img, (self.width, self.height), self.interpolation)
             return scaled_clips
         else:

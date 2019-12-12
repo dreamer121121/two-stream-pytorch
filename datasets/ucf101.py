@@ -146,8 +146,8 @@ class ucf101(data.Dataset): #继承torch的内置类Dataset重写一个数据集
 
     def __getitem__(self, index):
         """
-        所有继承Dataset的类必须重写此方法。在训练时会被框架自身调用。采样一段视频的帧，
-        :param index:
+        所有继承Dataset的类必须重写此方法。在训练时会被框架自身调用。或得一个样本one sample
+        :param index:#dataloader在载入数据时会自动传入index
         :return:
         """
         path, duration, target = self.clips[index]
@@ -196,10 +196,14 @@ class ucf101(data.Dataset): #继承torch的内置类Dataset重写一个数据集
         if self.target_transform is not None:
             target = self.target_transform(target)
         if self.video_transform is not None:
-            clip_input = self.video_transform(clip_input)
+            clip_input = self.video_transform(clip_input) #将clip_input 传入transform函数进行数据增广
 
         return clip_input, target
 
 
     def __len__(self):
+        '''
+        dataloader也会自动调用此方法确定自己管理的数据集有多少个样本
+        :return:
+        '''
         return len(self.clips)
