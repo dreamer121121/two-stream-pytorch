@@ -223,8 +223,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
     for i, (input, target) in enumerate(train_loader):
 
-        input = input.float().cuda(async=True)
-        target = target.cuda(async=True)
+        input = input.float().cuda()
+        target = target.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
 
