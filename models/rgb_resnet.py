@@ -17,6 +17,25 @@ model_urls = {
 }
 
 
+class ChannelAttention(nn.Module):
+    def __init__(self, in_planes, ratio=16):
+        super(ChannelAttention, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.max_pool = nn.AdaptiveMaxPool2d(1)
+
+        self.fc1   = nn.Conv2d(in_planes, in_planes // 16, 1, bias=False)
+        self.relu1 = nn.ReLU()
+        self.fc2   = nn.Conv2d(in_planes // 16, in_planes, 1, bias=False)
+
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        avg_out = self.fc2(self.relu1(self.fc1(self.avg_pool(x))))
+        max_out = self.fc2(self.relu1(self.fc1(self.max_pool(x))))
+        out = avg_out + max_out
+        return self.sigmoid(out)
+
+
 def conv3x3(in_planes, out_planes, stride=1):
     "3x3 convolution with padding"
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
@@ -70,6 +89,7 @@ class Bottleneck(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
+        self.ca = ChannelAttention(planes * 4)
 
     def forward(self, x):
         residual = x
@@ -83,7 +103,8 @@ class Bottleneck(nn.Module):
         out = self.relu(out)
 
         out = self.conv3(out)
-        out = self.bn3(out)
+        # out = self.bn3(out)
+        out = self.ca(out) * out
 
         if self.downsample is not None:
             residual = self.downsample(x)
