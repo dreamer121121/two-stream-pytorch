@@ -235,7 +235,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
         acc_mini_batch += prec1.item()
         loss = criterion(output, target_var)
         loss = loss / args.iter_size
-        loss_mini_batch += loss.itme()
+        loss_mini_batch += loss.item()
         loss.backward()
 
         if (i+1) % args.iter_size == 0:
