@@ -6,6 +6,7 @@ for v in videos:
     name = v.split('_')[1]
     if name not in classdir:
         os.mkdir(path+name)
+        classdir.append(name)
     os.system('mv '+v+' '+name)
-
+print(classdir)
 
