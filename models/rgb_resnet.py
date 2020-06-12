@@ -273,7 +273,7 @@ def rgb_resnet101(pretrained=False, **kwargs):
     model = ResNet(Bottleneck, [3, 4, 23, 3], **kwargs)
     if pretrained:
         # model.load_state_dict(model_zoo.load_url(model_urls['resnet152']))
-        pretrained_dict = model_zoo.load_url(url = model_urls['resnet101'],model_dir='/home/xt/two-stream-pytorch/models')
+        pretrained_dict = model_zoo.load_url(url = model_urls['resnet101'],model_dir='/home/xy/two-stream-pytorch/pretrained')
         model_dict = model.state_dict()
 
         # 1. filter out unnecessary keys
