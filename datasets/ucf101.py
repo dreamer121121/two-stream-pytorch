@@ -24,6 +24,7 @@ def make_dataset(root, source):
             data = split_f.readlines()
             for line in data:
                 line_info = line.split()
+                line_info[0] = line_info[0].split('_')[1]+'/'+line_info[0]
                 clip_path = os.path.join(root, line_info[0]) #视频段路径
                 duration = int(line_info[1]) #该段视频总共有多少帧
                 target = int(line_info[2]) #该段视频的所属类别
