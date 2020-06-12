@@ -271,8 +271,8 @@ def validate(val_loader, model, criterion):
 
     end = time.time()
     for i, (input, target) in enumerate(val_loader):
-        input = input.float().cuda(async=True)
-        target = target.cuda(async=True)
+        input = input.float().cuda()
+        target = target.cuda()
         input_var = torch.autograd.Variable(input, volatile=True)
         target_var = torch.autograd.Variable(target, volatile=True)
 
