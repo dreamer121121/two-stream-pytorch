@@ -20,7 +20,7 @@ class ChannelAttention(nn.Module):
         return self.sigmoid(out)
 
 class SpatialNet(nn.Module):
-    def __init__(self,num_class=1000):
+    def __init__(self,num_classes=1000):
         super(SpatialNet, self).__init__()
         self.ca = ChannelAttention(256)
         self.features = nn.Sequential(
