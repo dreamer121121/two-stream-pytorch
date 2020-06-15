@@ -285,9 +285,11 @@ class ShuffleNet(nn.Module):
 
         return F.log_softmax(x, dim=1)
 
-def rgb_shufflenet():
-    model = ShuffleNet()
+def rgb_shufflenet(pretrained=False, **kwargs):
+
+    model = ShuffleNet(**kwargs)
     return model
+
 if __name__ == "__main__":
     """Testing
     """

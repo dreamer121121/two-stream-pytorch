@@ -204,7 +204,7 @@ def main():
             }, is_best, checkpoint_name, args.resume)
 
 def build_model():
-    model = models.__dict__[args.arch](pretrained=True, num_classes=101)
+    model = models.__dict__[args.arch](pretrained=False, num_classes=101)
     model.cuda()
     return model
 
