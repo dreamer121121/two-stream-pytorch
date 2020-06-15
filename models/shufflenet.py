@@ -5,7 +5,7 @@ from torch.autograd import Variable
 from collections import OrderedDict
 from torch.nn import init
 
-__all__ = ['ShuffleNet']
+__all__ = ['ShuffleNet','rgb_shufflenet']
 def conv3x3(in_channels, out_channels, stride=1,
             padding=1, bias=True, groups=1):
     """3x3 convolution with padding
@@ -285,7 +285,9 @@ class ShuffleNet(nn.Module):
 
         return F.log_softmax(x, dim=1)
 
-
+def rgb_shufflenet():
+    model = ShuffleNet()
+    return model
 if __name__ == "__main__":
     """Testing
     """
