@@ -33,10 +33,10 @@ class SpatialNet(nn.Module):
             nn.MaxPool2d(3, stride=2),
             nn.Conv2d(256, 512, kernel_size=3),
             nn.ReLU(),
-            nn.Conv2d(512, 512, kernel_size=3),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, kernel_size=3),
-            nn.ReLU(),
+            # nn.Conv2d(512, 512, kernel_size=3),
+            # nn.ReLU(),
+            # nn.Conv2d(512, 512, kernel_size=3),
+            # nn.ReLU(),
             nn.MaxPool2d(3, stride=2))
 
         self.classifier = nn.Sequential(
