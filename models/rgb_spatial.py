@@ -31,13 +31,14 @@ class SpatialNet(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(),
             nn.MaxPool2d(3, stride=2),
-            nn.Conv2d(256, 512, kernel_size=3),
+            nn.Conv2d(256, 512, kernel_size=3,stride=2,padding=1),
             nn.ReLU(),
             # nn.Conv2d(512, 512, kernel_size=3),
             # nn.ReLU(),
             # nn.Conv2d(512, 512, kernel_size=3),
             # nn.ReLU(),
-            nn.MaxPool2d(3, stride=2))
+            nn.MaxPool2d(3, stride=2)
+        )
 
         self.classifier = nn.Sequential(
             nn.Linear(2048, 4096),
@@ -49,7 +50,9 @@ class SpatialNet(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
+        print(x.size())
         x = x.view(x.size(0), -1)
+        print(x.size())
         x = self.classifier(x)
 
         return x
@@ -101,7 +104,7 @@ def rgb_spatial(pretrained=False,**kwargs):
 
 if __name__ == '__main__':
     import torch
-    model = rgb_spatial(num_class=101)
+    model = rgb_spatial(num_classes=101)
     input = torch.randn(2,3,224,224)
     out = model(input)
     print(out.size())
