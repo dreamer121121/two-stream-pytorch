@@ -4,3 +4,4 @@ from .rgb_resnet import *
 from .flow_resnet import *
 from .rgb_shufflenet import *
 from .cashufflenet import *
+from .rgb_spatial import *
