@@ -50,7 +50,7 @@ class SpatialNet(nn.Module):
             nn.Dropout(),
             nn.Linear(4096, 2048),
             nn.Dropout(),
-            nn.Linear(2048, num_class),
+            nn.Linear(2048, num_classes),
         )
 
     def forward(self, x):
