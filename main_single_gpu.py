@@ -100,7 +100,7 @@ def main():
         os.makedirs(args.resume)
     log("Saving everything to directory %s." % (args.resume),file=log_stream)
 
-    cudnn.benchmark = True
+    cudnn.benchmark = False
 
     # Data transforming
     if args.modality == "rgb":
