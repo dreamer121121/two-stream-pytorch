@@ -27,8 +27,10 @@ class SpatialNet(nn.Module):
             nn.BatchNorm2d(96),
             nn.ReLU(),
             nn.MaxPool2d(3, stride=2),
-            nn.Conv2d(96, 256, kernel_size=5, stride=2),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(96, 256, kernel_size=5, stride=2))
+            # nn.BatchNorm2d(256),
+        self.ca = ChannelAttention(256)
+        self.features_2 = nn.Sequential(
             nn.ReLU(),
             nn.MaxPool2d(3, stride=2),
             nn.Conv2d(256, 512, kernel_size=3,stride=2,padding=1),
@@ -50,9 +52,11 @@ class SpatialNet(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
-        print(x.size())
+        #print(x.size())
+        x  = self.ca(x)*x
+        x = self.features_2(x)
         x = x.view(x.size(0), -1)
-        print(x.size())
+        #print(x.size())
         x = self.classifier(x)
 
         return x
